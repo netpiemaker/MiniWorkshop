@@ -1,1 +1,1 @@
-var config = '{ "appid": "armydev", "key": "sNVCRGQORlroTob", "secret": "GodT7cEPNoDw9GKGwbjqaM6Lm" }';
+var config = '{ "appid": "<APPID>", "key": "<KEY>", "secret": "<SECRET>" }';
