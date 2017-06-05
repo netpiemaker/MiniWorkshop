@@ -1,0 +1,1 @@
+var config = '{ "appid": "<APPID>", "key": "<KEY>", "secret": "<SECRET>" }';

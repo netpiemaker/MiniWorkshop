@@ -1,0 +1,51 @@
+﻿== LAB3 == 
+
+ส่วนที่ 1 ใช้สำหรับตรวจสอบข้อความที่เข้ามา และความถูกต้องของข้อความ ว่าเป็นค่าที่เป็นอุณหภูมิ และความชื้นหรือไม่
+วางโค้ดด้านล่างภายใต้ microgear.on('message'
+```
+		<!-- Code LAB3 -->
+		// ตรวจสอบ topic ตาม topic ที่ได้ใข้คำสั่ง publish ซึ่งรูปแบบ topic เมื่อใช้คำสั่ง publish จะเป็นดังนี้ "/<APPID>/<TOPIC NAME>"
+		// <APPID> คือ Application name ที่ได้สร้างไว้บนหน้าเว็บ netpie.io  url: https://netpie.io/app
+		// <TOPIC NAME> คือ ชื่อ topic ที่เราสนใจ หรือต้องการรับข้อมูล  ตัวอย่างเช่น /dht 
+		// *** ปล. การจะได้รับข้อมูลจาก topic ที่เราสนใจ จะต้องใช้คู่กับคำสั่ง microgear.subscribe("<TOPIC NAME>"); การ subscribe topic จะต้องระบุเครื่องหมาย / ข้างหน้าเสมอ
+		//	การกำหนดการ subscribe นั้นจะแบ่งออกเป็น
+		//	"/#" คือ สนใจข้อมูลทุก topic
+		//	"/sometopic" คือ สนใจข้อมูลเฉพาะ topic /sometopic ภายใต้ APPID ตามที่ใช้งานอยู่
+		//	"/sometopic/+" คือ สนใจข้อมูลทุกtopic ที่เป็น subtopic ของ /sometopic และอยู่ภายใต้ APPID ตามที่ใช้งานอยู่
+		if(topic==("/"+APPID+"/dht")){
+			var data = msg.split(','); // แบ่ง string ผลลัพธ์ที่ได้จะอยู่ในรูป array
+			if(data.length){
+				<!-- กำหนดค่า humid และ temp -->
+				document.getElementById('humid').innerHTML = data[0];	// array ตำแหน่งที่ 0 คือ ความชื้น
+				document.getElementById('temp').innerHTML = data[1];	// array ตำแหน่งที่ 1 คือ อุณหภูมิ
+			}
+		}
+		<!-- End Code LAB3 -->
+```
+
+ส่วนที่ 2 ใช้สำหรับ subscribe topic ที่ต้องการรับข้อความ
+วางโค้ดด้านล่างภายใต้ microgear.on('connected'...
+```
+		<!-- Code LAB3 -->
+		<!-- subscribe topic ชื่อ "/dht" เพื่อต้องการรับข้อมูลที่ถูกส่งผ่าน topic /dht -->
+		microgear.subscribe("/dht");
+		<!-- End Code LAB3 -->
+```
+
+ส่วนที่ 3 UI ใช้สำหรับแสดงค่าผ่านทางหน้าเว็บ
+วางโค้ดด้านล่างภายใต้ <div class="the-container">
+```
+	<!-- Code LAB3 -->
+	<div id="sensor">
+		<span id="icon-temp">
+			<span class="fa fa-thermometer-empty"></span>
+			<span id="temp">-</span> &#176;C
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span id="icon-humid">
+			<span class="fa fa-tint"></span>
+			<span id="humid">-</span> %
+		</span>
+	</div>
+	<!-- End Code LAB3 -->
+```

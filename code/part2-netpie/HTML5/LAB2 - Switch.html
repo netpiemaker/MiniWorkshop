@@ -1,0 +1,116 @@
+<script type="text/javascript" src="https://cdn.netpie.io/microgear.js"></script> <!-- microgear library สำหรับการเชื่อมต่อ NETPIE และใช้สำหรับการสื่อสารผ่าน NETPIE-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- font icons -->
+<link href='css/style.css' rel='stylesheet' type='text/css'> <!-- stylesheet สำหรับแสดง UI บนหน้าเว็บ -->
+<script type="text/javascript" src="config/config.json"></script>	<!-- เรียกไฟล์ config ที่มีค่าตัวแปร appid, key และ secret ที่จำเป็นสำหรับการเชื่อมต่อ NETPIE -->
+
+<script type="text/javascript">
+	var auth = JSON.parse(config); // แปลง string ให้อยู่ในรูปแบบของ json ที่อ่านได้
+	const APPID = auth.appid;		// กำหนดค่า appid
+	const KEY = auth.key;			// กำหนดค่า key
+	const SECRET = auth.secret;		// กำหนดค่า secret
+	const ALIAS = "html5";			// กำหนดชื่อ device สำหรับติดต่อสื่องสาร และแสดงตัวตนที่ออนไลน์อยู่
+	
+	// ประการ object สำหรับใช้งาน microgear
+	var microgear = Microgear.create({
+		key: KEY,
+		secret: SECRET,
+		alias : ALIAS
+	});
+	
+	function changeState(){
+		// ดึงค่าสถานะของ switch เมื่อมีการกด
+		var stateON = document.getElementById('toggle').checked;
+		// ถ้าเป็น true คือ เปิด, false คือ ปิด
+		if(stateON){
+			// ส่งค่า 1 เพื่อเปิดไฟ
+			microgear.chat("switch","1");
+		}else{
+			// ส่งค่า 0 เพื่อปิดไฟ
+			microgear.chat("switch","0");
+		}
+		
+		// บังคับไม่ให้สถานะ switch เปลี่ยน จนกว่าจะมีการตอบกลับจากอุปกรณ์ที่รับคำสั่ง
+		document.getElementById('toggle').checked = !stateON;
+	}
+
+	microgear.on('message',function(topic,msg) {
+		
+		<!-- Debug -->
+		console.log("TOPIC : "+topic+" , MSG : "+msg);
+		
+		<!-- Code LAB2 -->
+		// ตรวจสอบ topic ตามชื่ออุปกรณ์ ซึ่งรูปแบบ topic เมื่อใช้คำสั่ง chat จะเป็นดังนี้ "/<APPID>/gearname/<DEVICE ALIAS>"
+		// <APPID> คือ Application name ที่ได้สร้างไว้บนหน้าเว็บ netpie.io  url: https://netpie.io/app
+		// <DEVICE ALIAS> คือ ชื่ออุปกรณ์ ตามที่ได้กำหนดไว้ด้านบน
+		//if(topic==("/"+APPID+"/gearname/"+ALIAS)){	
+			if(msg==1){		// กำหนดค่า switch เป็นอยู่ตำแหน่ง ON
+				document.getElementById('state').innerHTML = "ON";
+				document.getElementById('toggle').checked = true;
+			}else{		// กำหนดค่า switch เป็นอยู่ตำแหน่ง OFF
+				document.getElementById('state').innerHTML = "OFF";
+				document.getElementById('toggle').checked = false;
+			}
+		//}
+		<!-- End Code LAB2 -->
+		
+		<!-- Code LAB3 -->
+		<!-- End Code LAB3 -->
+	});
+
+	microgear.on('connected', function() {
+		microgear.setAlias(ALIAS);
+		<!-- Code LAB3 -->
+		<!-- End Code LAB3 -->
+		document.getElementById("statusConnected").innerHTML = "<span style='color:#34A87C;'>Connected with netpie...</font>";
+	});
+
+	<!-- ในบางกรณีถ้าต้องการรู้ว่าอุปกรณ์มีการหลุดจากการเชื่อมต่อกับเซิฟเวอร์หรือไม่ จะดูจาก event ondisconnected -->
+	microgear.on('disconnected', function() {
+		document.getElementById("statusConnected").innerHTML = "<span style='color:#e67979;'>Disconnected to netpie...</font>";
+	});
+
+	<!-- event onpresent แสดงรายชื่ออุปกรณ์ออนไลน์/ออฟไลน์ เมื่อมีอุปกรณ์ใหม่เชื่อมต่อหรือมีอุปกรณ์ตัดการเชื่อมต่อ NETPIE ด้วย appid เดียวกัน -->
+	microgear.on('present', function(event) {
+		console.log(event);
+	});
+	
+	// เชื่อมต่อ NETPIE เป็นคำสั่งที่เอาไว้ท้ายสุด เมื่อกำหนดตัวแปรและ event ต่างๆเรียบเร้อย
+	microgear.connect(APPID);
+</script>
+
+<!-- Start HTML -->
+<div class="the-container">
+	<!-- Code LAB2 -->
+	<input type="checkbox" id="toggle" onclick="changeState();"/>
+	<label for="toggle"></label>
+
+	<div class="day-night-cont">
+		<span class="the-sun"></span>
+		<div class="the-moon"><span class="moon-inside"></span></div>
+	</div>
+
+	<div class="switch">
+	<div class="button">
+		<div class="b-inside"></div>
+	</div>
+	</div>
+	<div class="c-window">
+	<span class="the-sun"></span>
+	<span class="the-moon"></span>
+	<div class="the-fox">
+		<div class="fox-face">
+			<section class="eyes left"></section>
+			<section class="eyes right"></section> 
+			<span class="nose"></span>
+			<div class="white-part"><span class="mouth"></span></div>
+		</div>  
+	</div>
+	</div>
+	<div id="statusConnected">Connecting...</div>
+	<div id="divState">Switch : <span id="state">-</span></div>
+	<!-- End Code LAB2 -->
+	
+	<!-- Code LAB3 -->
+	<!-- End Code LAB3 -->
+</div>
+<!-- End HTML -->
