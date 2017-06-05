@@ -23,7 +23,15 @@ void setup() {
     //if it does not connect it starts an access point with the specified name
     //here  "AutoConnectAP"
     //and goes into a blocking loop awaiting configuration
-    wifiManager.autoConnect("AutoConnectAP", "Kevin");
+    wifiManager.autoConnect("AutoConnectAP");
+    /*
+    if (!wifiManager.autoConnect("AutoConnectAP", "password")) {
+    Serial.println("failed to connect, we should reset as see if it connects");
+    delay(3000);
+    ESP.reset();
+    delay(5000);
+  }
+  */
     //or use this for auto generated name ESP + ChipID
     //wifiManager.autoConnect();
 
