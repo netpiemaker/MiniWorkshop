@@ -3,8 +3,8 @@
 //want to connect with NODEMCU
 //This library help you to reconnect to wifi AP automatically
 
-const char* ssid = "NSTDA-Project-7013";  
-const char* password = "1q2w3e4r";
+const char* ssid = "SSID";  
+const char* password = "PASSWORD";
 
 void setup(){
   Serial.begin(9600);
