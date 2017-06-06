@@ -7,7 +7,7 @@ unsigned long lastTimeWriteFeed = 0;
 void loop() {
     if (microgear.connected()) {
     ..
-    if(millis()-lastTimeWriteFeed > 15000){
+        if(millis()-lastTimeWriteFeed > 15000){
           lastTimeWriteFeed = millis();
           if(humid!=0 && temp!=0){
             String data = "{\"humid\":";
