@@ -97,7 +97,7 @@ void loop() {
           Serial.print(" *C ");
 
           // ตรวจสอบค่า humid และ temp เป็นตัวเลขหรือไม่ และค่าที่ได้เป็นค่าที่ถูกต้องหรือไม่
-          if (isnan(humid) || isnan(temp) || h > 10000 || t > 10000) {
+          if (isnan(h) || isnan(t) || h > 10000 || t > 10000) {
             Serial.println("Failed to read from DHT sensor!");
           }else{
             humid = h;
